@@ -1,0 +1,17 @@
+FROM node:20.10.0
+
+WORKDIR /home/node/app
+
+COPY package.json .
+COPY package-lock.json .
+
+RUN apt-get update && \
+  apt-get -y dist-upgrade && \
+  corepack enable && \
+  npm install
+
+COPY . .
+
+EXPOSE $PORT
+
+VOLUME [ "/home/node/app" ]

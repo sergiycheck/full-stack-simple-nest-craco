@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  auth_api_back:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - 3203:3203
+    volumes:
+      - ./:/home/node/app
+    restart: always
+    environment:
+      PORT: 3203
+      NODE_ENV: development
+      DB_CONNECTION_STRING: mysql://user:password@mysql_db:3306/database_name
+
+      JWT_SECRET: private_key
+      JWT_EXPIRES_IN: 1d
+    depends_on:
+      - mysql_db
+    command: bash -c "npm i && npm run start:debug"
+
+  mysql_db:
+    image: mysql
+    restart: always
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: database_name
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - '3306:3306'
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  db_data:

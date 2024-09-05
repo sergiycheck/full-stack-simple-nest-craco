@@ -1,0 +1,59 @@
+@host = http://localhost:3203
+@token =
+
+
+### sign in user
+POST {{host}}/users/sign-in
+Content-Type: application/json
+
+{
+  "email": "user1@domain.com",
+  "password": "password1"
+}
+
+### sign up user
+POST {{host}}/users/sign-up
+Content-Type: application/json
+
+{
+  "email": "user1@domain.com",
+  "password": "password1",
+  "repeatPassword": "password1"
+}
+
+
+### sing out user
+POST {{host}}/users/sign-out
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "id": 2
+}
+
+### get user
+GET {{host}}/users
+Authorization: Bearer {{token}}
+
+### get user by email
+GET {{host}}/users?email=user1@domain.com
+Authorization: Bearer {{token}}
+
+### get user by id
+GET {{host}}/users?id=1
+Authorization: Bearer {{token}}
+
+
+### get user by email with bad token
+GET {{host}}/users?email=user1@domain
+Authorization: Bearer malformed_token
+
+
+### delete user by id
+POST {{host}}/users/remove
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "id": 2
+}
