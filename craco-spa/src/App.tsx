@@ -39,15 +39,14 @@ function App() {
     async function fetchUser() {
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) return;
-
-      const payload = decodeJwt(accessToken);
-
-      if (!payload) return;
-      if (!payload.email) return;
-
-      const { email } = payload as JwtPayload;
-
       try {
+        const payload = decodeJwt(accessToken);
+
+        if (!payload) return;
+        if (!payload.email) return;
+
+        const { email } = payload as JwtPayload;
+
         setLoading(true);
         const user = await apiUsers.getUser({ email }, accessToken);
 
